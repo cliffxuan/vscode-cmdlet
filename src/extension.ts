@@ -12,28 +12,41 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand("vscode-rg-fzf.rgFzf", () => {
-    // The code you place here will be executed every time your command is executed
+  const disposable = vscode.commands.registerCommand(
+    "vscode-rg-fzf.rgFzf",
+    () => {
+      // The code you place here will be executed every time your command is executed
 
-    // Display a message box to the user
-    let editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      return;
+      // Display a message box to the user
+      const activeEditor = vscode.window.activeTextEditor;
+      if (!activeEditor) {
+        return;
+      }
+
+      const wordRange = activeEditor.document.getWordRangeAtPosition(
+        activeEditor.selection.start
+      );
+      if (!wordRange) {
+        return;
+      }
+
+      const workspaceFolder = vscode.workspace.workspaceFolders
+        ?.map((wf) => wf.uri.fsPath)
+        .filter((fsPath) => activeEditor.document.fileName.startsWith(fsPath))[0];
+      if (!workspaceFolder) {
+        return;
+      }
+
+      const wordText = activeEditor.document.getText(wordRange);
+      vscode.commands.executeCommand("workbench.action.terminal.focus");
+      vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
+        text: `cd ${workspaceFolder}\x0d`,
+      });
+      vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
+        text: `xx ${wordText}\x0d`,
+      });
     }
-
-    let wordRange = editor.document.getWordRangeAtPosition(
-      editor.selection.start
-    );
-    if (!wordRange) {
-      return;
-    }
-
-    let wordText = editor.document.getText(wordRange);
-    vscode.commands.executeCommand("workbench.action.terminal.focus");
-    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
-      text: `xx ${wordText}\x0d`,
-    });
-  });
+  );
 
   context.subscriptions.push(disposable);
 }
