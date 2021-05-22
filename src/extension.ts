@@ -66,8 +66,28 @@ export function activate(context: vscode.ExtensionContext) {
     });
   });
 
+  const lf = vscode.commands.registerCommand("vscode-fzf.lf", () => {
+    const activeEditor = vscode.window.activeTextEditor;
+    if (!activeEditor) {
+      vscode.window.showErrorMessage("no active editor");
+      return;
+    }
+
+    const folder =
+      getDocumentWorkspaceFolder() ||
+      path.dirname(activeEditor.document.fileName);
+    vscode.commands.executeCommand("workbench.action.terminal.focus");
+    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
+      text: `cd ${folder}\x0d`,
+    });
+    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
+      text: `EDITOR=code lf\x0d`,
+    });
+  });
+
   context.subscriptions.push(rgFzf);
   context.subscriptions.push(fdFzf);
+  context.subscriptions.push(lf);
 }
 
 // this method is called when your extension is deactivated

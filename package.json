@@ -11,7 +11,8 @@
   ],
   "activationEvents": [
     "onCommand:vscode-fzf.rgFzf",
-    "onCommand:vscode-fzf.fdFzf"
+    "onCommand:vscode-fzf.fdFzf",
+    "onCommand:vscode-fzf.lf"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -23,6 +24,10 @@
       {
         "command": "vscode-fzf.fdFzf",
         "title": "fd fzf"
+      },
+      {
+        "command": "vscode-fzf.lf",
+        "title": "lf"
       }
     ]
   },
