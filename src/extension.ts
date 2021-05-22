@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
       text: `cd ${folder}\x0d`,
     });
     vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
-      text: `xf\x0d`,
+      text: `xf --executable code\x0d`,
     });
   });
 
