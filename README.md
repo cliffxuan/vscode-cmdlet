@@ -1,6 +1,6 @@
-# vscode-rg-fzf README
+# vscode-fzf README
 
-This is the README for your extension "vscode-rg-fzf". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "vscode-fzf". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

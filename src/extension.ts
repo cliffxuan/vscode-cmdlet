@@ -15,12 +15,12 @@ function getDocumentWorkspaceFolder(): string | undefined {
 export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "vscode-rg-fzf" is now active!');
+  console.log('Congratulations, your extension "vscode-fzf" is now active!');
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  const rgFzf = vscode.commands.registerCommand("vscode-rg-fzf.rgFzf", () => {
+  const rgFzf = vscode.commands.registerCommand("vscode-fzf.rgFzf", () => {
     const activeEditor = vscode.window.activeTextEditor;
     if (!activeEditor) {
       vscode.window.showErrorMessage("no active editor");
@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
   });
 
-  const fdFzf = vscode.commands.registerCommand("vscode-rg-fzf.fdFzf", () => {
+  const fdFzf = vscode.commands.registerCommand("vscode-fzf.fdFzf", () => {
     const activeEditor = vscode.window.activeTextEditor;
     if (!activeEditor) {
       vscode.window.showErrorMessage("no active editor");

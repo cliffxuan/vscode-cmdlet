@@ -1,6 +1,6 @@
 {
-  "name": "vscode-rg-fzf",
-  "displayName": "vscode-rg-fzf",
+  "name": "vscode-fzf",
+  "displayName": "vscode-fzf",
   "description": "vscode -> rg -> fzf -> vscode",
   "version": "0.0.1",
   "engines": {
@@ -10,18 +10,18 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-rg-fzf.rgFzf",
-    "onCommand:vscode-rg-fzf.fdFzf"
+    "onCommand:vscode-fzf.rgFzf",
+    "onCommand:vscode-fzf.fdFzf"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-rg-fzf.rgFzf",
+        "command": "vscode-fzf.rgFzf",
         "title": "rg fzf"
       },
       {
-        "command": "vscode-rg-fzf.fdFzf",
+        "command": "vscode-fzf.fdFzf",
         "title": "fd fzf"
       }
     ]
