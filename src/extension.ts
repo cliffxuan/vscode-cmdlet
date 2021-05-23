@@ -10,85 +10,63 @@ function getDocumentWorkspaceFolder(): string | undefined {
     .filter((fsPath) => fileName?.startsWith(fsPath))[0];
 }
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "vscode-fzf" is now active!');
-
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  const rgFzf = vscode.commands.registerCommand("vscode-fzf.rgFzf", () => {
-    const activeEditor = vscode.window.activeTextEditor;
-    if (!activeEditor) {
-      vscode.window.showErrorMessage("no active editor");
-      return;
-    }
-
-    const folder =
-      getDocumentWorkspaceFolder() ||
-      path.dirname(activeEditor.document.fileName);
-
-    const wordRange = activeEditor.document.getWordRangeAtPosition(
-      activeEditor.selection.start
-    );
-    if (!wordRange) {
-      return;
-    }
-    const wordText = activeEditor.document.getText(wordRange);
-    vscode.commands.executeCommand("workbench.action.terminal.focus");
-    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
-      text: `cd ${folder}\x0d`,
-    });
-    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
-      text: `xx --editor code ${wordText}\x0d`,
-    });
-  });
-
-  const fdFzf = vscode.commands.registerCommand("vscode-fzf.fdFzf", () => {
-    const activeEditor = vscode.window.activeTextEditor;
-    if (!activeEditor) {
-      vscode.window.showErrorMessage("no active editor");
-      return;
-    }
-
-    const folder =
-      getDocumentWorkspaceFolder() ||
-      path.dirname(activeEditor.document.fileName);
-    vscode.commands.executeCommand("workbench.action.terminal.focus");
-    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
-      text: `cd ${folder}\x0d`,
-    });
-    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
-      text: `xf --executable code\x0d`,
-    });
-  });
-
-  const lf = vscode.commands.registerCommand("vscode-fzf.lf", () => {
-    const activeEditor = vscode.window.activeTextEditor;
-    if (!activeEditor) {
-      vscode.window.showErrorMessage("no active editor");
-      return;
-    }
-
-    const folder =
-      getDocumentWorkspaceFolder() ||
-      path.dirname(activeEditor.document.fileName);
-    vscode.commands.executeCommand("workbench.action.terminal.focus");
-    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
-      text: `cd ${folder}\x0d`,
-    });
-    vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
-      text: `EDITOR=code lf\x0d`,
-    });
-  });
-
-  context.subscriptions.push(rgFzf);
-  context.subscriptions.push(fdFzf);
-  context.subscriptions.push(lf);
+function getDocumentFolder(): string | undefined {
+  const fileName = vscode.window.activeTextEditor?.document.fileName;
+  return fileName ? path.dirname(fileName) : undefined;
 }
 
-// this method is called when your extension is deactivated
+function getWordUnderCursor(): string | undefined {
+  const activeTextEditor = vscode.window.activeTextEditor;
+  if (!activeTextEditor) {
+    return;
+  }
+  const wordRange = activeTextEditor.document.getWordRangeAtPosition(
+    activeTextEditor.selection.start
+  );
+  if (!wordRange) {
+    return;
+  }
+  return activeTextEditor.document.getText(wordRange);
+}
+
+async function runCmd({
+  cmd,
+  folder,
+}: {
+  cmd: string | undefined;
+  folder: string | undefined;
+}) {
+  cmd =
+    cmd ??
+    (await vscode.window.showInputBox({
+      placeHolder: "Command to execute",
+    }));
+  if (!cmd) {
+    vscode.window.showErrorMessage("no command entered");
+    return;
+  }
+  if (cmd.includes("${wordUnderCursor}")) {
+    const wordUnderCursor = getWordUnderCursor();
+    if (!wordUnderCursor) {
+      vscode.window.showErrorMessage("no word is under the cursor");
+      return;
+    }
+    cmd = cmd.replace("${wordUnderCursor}", wordUnderCursor);
+  }
+  if (folder) {
+    cmd = `cd ${folder} && ${cmd}`;
+  }
+  vscode.window.showInformationMessage(`running cmd: ${cmd}`);
+  vscode.commands.executeCommand("workbench.action.terminal.focus");
+  vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
+    text: `${cmd}\x0d`,
+  });
+}
+
+export function activate(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vscode-term.runCmd", runCmd)
+  );
+}
+
 export function deactivate() {}

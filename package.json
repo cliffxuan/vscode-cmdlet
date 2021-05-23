@@ -1,7 +1,7 @@
 {
-  "name": "vscode-fzf",
-  "displayName": "vscode-fzf",
-  "description": "vscode -> rg -> fzf -> vscode",
+  "name": "vscode-term",
+  "displayName": "vscode-term",
+  "description": "vscode terminal enhancement",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.56.0"
@@ -10,24 +10,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-fzf.rgFzf",
-    "onCommand:vscode-fzf.fdFzf",
-    "onCommand:vscode-fzf.lf"
+    "onCommand:vscode-term.runCmd"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-fzf.rgFzf",
-        "title": "rg fzf"
-      },
-      {
-        "command": "vscode-fzf.fdFzf",
-        "title": "fd fzf"
-      },
-      {
-        "command": "vscode-fzf.lf",
-        "title": "lf"
+        "command": "vscode-term.runCmd",
+        "title": "run cmd"
       }
     ]
   },
