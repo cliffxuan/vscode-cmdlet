@@ -17,7 +17,7 @@
     "commands": [
       {
         "command": "vscode-term.runCmd",
-        "title": "run cmd"
+        "title": "Term: run cmd"
       }
     ]
   },

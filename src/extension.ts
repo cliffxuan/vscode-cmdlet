@@ -29,13 +29,7 @@ function getWordUnderCursor(): string | undefined {
   return activeTextEditor.document.getText(wordRange);
 }
 
-async function runCmd({
-  cmd,
-  folder,
-}: {
-  cmd: string | undefined;
-  folder: string | undefined;
-}) {
+async function runCmd(cmd: string | undefined, folder: string | undefined) {
   cmd =
     cmd ??
     (await vscode.window.showInputBox({
@@ -65,7 +59,17 @@ async function runCmd({
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
-    vscode.commands.registerCommand("vscode-term.runCmd", runCmd)
+    vscode.commands.registerCommand(
+      "vscode-term.runCmd",
+      (
+        args:
+          | { cmd: string | undefined; folder: string | undefined }
+          | undefined
+      ) => {
+        const { cmd, folder } = args ?? {};
+        runCmd(cmd, folder);
+      }
+    )
   );
 }
 
