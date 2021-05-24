@@ -15,6 +15,11 @@ function getFileDirname(): string | undefined {
   return fileName ? path.dirname(fileName) : undefined;
 }
 
+function getWorkspaceFolder(): string | undefined {
+  return vscode.workspace.workspaceFolders
+    ?.map((wf) => wf.uri.fsPath)[0];
+}
+
 function getWordUnderCursor(): string | undefined {
   const activeTextEditor = vscode.window.activeTextEditor;
   if (!activeTextEditor) {
@@ -57,7 +62,7 @@ async function runCmd(cmd: string | undefined, folder: string | undefined) {
   }
   if (folder) {
     if (folder === "${projectFolder}") {
-      folder = getfileWorkspaceFolder() ?? getFileDirname() ?? "${workspaceFolder}";
+      folder = getfileWorkspaceFolder() ?? getFileDirname() ?? getWorkspaceFolder() ?? "${cwd}";
     }
     cmd = `cd ${folder} && ${cmd}`;
   }
