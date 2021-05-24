@@ -71,7 +71,10 @@ async function runCmd(cmd: string | undefined, folder: string | undefined) {
     vscode.window.terminals.filter((t) => t.name === "vs-term")[0] ??
     vscode.window.createTerminal({ name: "vs-term" });
   vscode.window.showInformationMessage(`run in vs-term: ${cmd}`);
-  term.sendText(`${cmd}`);
+  // use below instead of term.sendText(`${cmd}`) for builtin variable evaluation.
+  vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
+    text: `${cmd}\x0d`,
+  });
   term.show();
 }
 
