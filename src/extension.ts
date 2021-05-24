@@ -3,14 +3,14 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-function getDocumentWorkspaceFolder(): string | undefined {
+function getfileWorkspaceFolder(): string | undefined {
   const fileName = vscode.window.activeTextEditor?.document.fileName;
   return vscode.workspace.workspaceFolders
     ?.map((wf) => wf.uri.fsPath)
     .filter((fsPath) => fileName?.startsWith(fsPath))[0];
 }
 
-function getDocumentFolder(): string | undefined {
+function getFileDirname(): string | undefined {
   const fileName = vscode.window.activeTextEditor?.document.fileName;
   return fileName ? path.dirname(fileName) : undefined;
 }
@@ -48,6 +48,9 @@ async function runCmd(cmd: string | undefined, folder: string | undefined) {
     cmd = cmd.replace("${wordUnderCursor}", wordUnderCursor);
   }
   if (folder) {
+    if (folder === "${projectFolder}") {
+      folder = getfileWorkspaceFolder() ?? getFileDirname();
+    }
     cmd = `cd ${folder} && ${cmd}`;
   }
   vscode.window.showInformationMessage(`running cmd: ${cmd}`);
