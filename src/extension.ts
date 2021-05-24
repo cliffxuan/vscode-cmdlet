@@ -47,6 +47,14 @@ async function runCmd(cmd: string | undefined, folder: string | undefined) {
     }
     cmd = cmd.replace("${wordUnderCursor}", wordUnderCursor);
   }
+  if (cmd.includes("${searchPhrase}")) {
+    const searchPhrase = await vscode.window.showInputBox({placeHolder: "Search phrase"});
+    if (!searchPhrase) {
+      vscode.window.showErrorMessage("no search phrase entered");
+      return;
+    }
+    cmd = cmd.replace("${searchPhrase}", searchPhrase);
+  }
   if (folder) {
     if (folder === "${projectFolder}") {
       folder = getfileWorkspaceFolder() ?? getFileDirname();
