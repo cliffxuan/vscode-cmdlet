@@ -57,7 +57,7 @@ async function runCmd(cmd: string | undefined, folder: string | undefined) {
   }
   if (folder) {
     if (folder === "${projectFolder}") {
-      folder = getfileWorkspaceFolder() ?? getFileDirname();
+      folder = getfileWorkspaceFolder() ?? getFileDirname() ?? "${workspaceFolder}";
     }
     cmd = `cd ${folder} && ${cmd}`;
   }
