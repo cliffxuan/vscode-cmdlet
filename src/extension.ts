@@ -13,6 +13,10 @@ function getFileDirname(): string | undefined {
   return fileName ? path.dirname(fileName) : undefined;
 }
 
+function getOpenFiles(): string[] {
+  return vscode.workspace.textDocuments.map(d => d.fileName).filter(f => !f.endsWith(".git"));
+}
+
 function getWorkspaceFolder(): string | undefined {
   return vscode.workspace.workspaceFolders?.map((wf) => wf.uri.fsPath)[0];
 }
@@ -31,7 +35,7 @@ function getWordUnderCursor(): string | undefined {
   return activeTextEditor.document.getText(wordRange);
 }
 
-async function runCmd(cmd: string | undefined, folder: string | undefined) {
+async function runCmd(cmd: string | undefined, folder: string | undefined, termName: string | undefined) {
   cmd =
     cmd ??
     (await vscode.window.showInputBox({
@@ -59,6 +63,9 @@ async function runCmd(cmd: string | undefined, folder: string | undefined) {
     }
     cmd = cmd.replace("${searchPhrase}", searchPhrase);
   }
+  if (cmd.includes("${openFiles}")) {
+    cmd = cmd.replace("${openFiles}", getOpenFiles().join("\n"));
+  }
   if (folder === "${projectFolder}") {
     folder =
       getfileWorkspaceFolder() ??
@@ -67,11 +74,13 @@ async function runCmd(cmd: string | undefined, folder: string | undefined) {
       "$HOME";
   }
   cmd = folder ? `cd ${folder} && ${cmd}` : cmd;
+  // termName = termName ?? "term-" + [...Array(3)].map(() => Math.random().toString(36)[2]).join('');
+  termName = "cmdlet";
   const term =
-    vscode.window.terminals.filter((t) => t.name === "vs-term")[0] ??
-    vscode.window.createTerminal({ name: "vs-term" });
-  vscode.window.showInformationMessage(`run in vs-term: ${cmd}`);
-  // use below instead of term.sendText(`${cmd}`) for builtin variable evaluation.
+    vscode.window.terminals.filter((t) => t.name === termName)[0] ??
+    vscode.window.createTerminal({ name: termName });
+  vscode.window.showInformationMessage(`run in ${termName}: ${cmd}`);
+  // use below instead of term.sendText(`${cmd}`) for builtin variable substitution.
   vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
     text: `${cmd}\x0d`,
   });
@@ -81,14 +90,14 @@ async function runCmd(cmd: string | undefined, folder: string | undefined) {
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vscode-term.runCmd",
+      "vscode-cmdlet.runCmd",
       (
         args:
           | { cmd: string | undefined; folder: string | undefined }
           | undefined
       ) => {
         const { cmd, folder } = args ?? {};
-        runCmd(cmd, folder);
+        runCmd(cmd, folder, undefined);
       }
     )
   );
