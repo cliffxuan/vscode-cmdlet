@@ -80,23 +80,22 @@ async function runCmd(
       "$HOME";
   }
   cmd = folder ? `cd ${folder} && ${cmd}` : cmd;
-  // termName = termName ?? "term-" + [...Array(3)].map(() => Math.random().toString(36)[2]).join('');
   termName = "cmdlet";
   const term =
     vscode.window.terminals.filter((t) => t.name === termName)[0] ??
     vscode.window.createTerminal({ name: termName });
   vscode.window.showInformationMessage(`run in ${termName}: ${cmd}`);
-  let triedShow : boolean = false;
-  let cnt: number = 0;
-  while (term !== vscode.window.activeTerminal) {
-    if (!triedShow) {
-      term.show();
-    }
-    if ((cnt += 1) > 10) {
-      vscode.window.showErrorMessage(`failed showing terminal ${termName}`);
+  for (let i = 0; i < 10; i++) {
+    if (term === vscode.window.activeTerminal) {
       break;
     }
-    await setTimeout(() => {}, 100);
+    if (i === 0) {
+      term.show();
+    }
+    if (i === 10) {
+      vscode.window.showErrorMessage(`failed to open terminal ${termName}`);
+    }
+    await new Promise(res => setTimeout(res, 100));
   }
   await vscode.commands.executeCommand("workbench.action.terminal.clear");
   // use below instead of term.sendText(`${cmd}`) for builtin variable substitution.
