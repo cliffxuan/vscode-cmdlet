@@ -14,7 +14,9 @@ function getFileDirname(): string | undefined {
 }
 
 function getOpenFiles(): string[] {
-  return vscode.workspace.textDocuments.map(d => d.fileName).filter(f => !f.endsWith(".git"));
+  return vscode.workspace.textDocuments
+    .map((d) => d.fileName)
+    .filter((f) => !f.endsWith(".git"));
 }
 
 function getWorkspaceFolder(): string | undefined {
@@ -35,7 +37,11 @@ function getWordUnderCursor(): string | undefined {
   return activeTextEditor.document.getText(wordRange);
 }
 
-async function runCmd(cmd: string | undefined, folder: string | undefined, termName: string | undefined) {
+async function runCmd(
+  cmd: string | undefined,
+  folder: string | undefined,
+  termName: string | undefined
+) {
   cmd =
     cmd ??
     (await vscode.window.showInputBox({
@@ -80,11 +86,23 @@ async function runCmd(cmd: string | undefined, folder: string | undefined, termN
     vscode.window.terminals.filter((t) => t.name === termName)[0] ??
     vscode.window.createTerminal({ name: termName });
   vscode.window.showInformationMessage(`run in ${termName}: ${cmd}`);
+  let triedShow : boolean = false;
+  let cnt: number = 0;
+  while (term !== vscode.window.activeTerminal) {
+    if (!triedShow) {
+      term.show();
+    }
+    if ((cnt += 1) > 10) {
+      vscode.window.showErrorMessage(`failed showing terminal ${termName}`);
+      break;
+    }
+    await setTimeout(() => {}, 100);
+  }
+  await vscode.commands.executeCommand("workbench.action.terminal.clear");
   // use below instead of term.sendText(`${cmd}`) for builtin variable substitution.
   vscode.commands.executeCommand("workbench.action.terminal.sendSequence", {
     text: `${cmd}\x0d`,
   });
-  term.show();
 }
 
 export function activate(context: vscode.ExtensionContext) {
