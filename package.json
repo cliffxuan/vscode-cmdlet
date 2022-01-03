@@ -1,56 +1,62 @@
 {
-  "name": "cmdlet",
-  "displayName": "cmdlet",
-  "description": "run command in the terminal",
-  "publisher": "cliffxuan",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cliffxuan/vscode-cmdlet.git"
-  },
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.56.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:cmdlet.runCmd"
-  ],
-  "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "cmdlet.runCmd",
-        "title": "Cmdlet: run cmd"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "test-compile": "tsc -p ./",
-    "test-watch": "tsc -watch -p ./",
-    "pretest": "npm run test-compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
-  },
-  "devDependencies": {
-    "@types/glob": "^7.1.3",
-    "@types/mocha": "^8.0.4",
-    "@types/node": "^12.11.7",
-    "@types/vscode": "^1.56.0",
-    "@typescript-eslint/eslint-plugin": "^4.14.1",
-    "@typescript-eslint/parser": "^4.14.1",
-    "eslint": "^7.19.0",
-    "glob": "^7.1.6",
-    "mocha": "^8.2.1",
-    "ts-loader": "^8.0.14",
-    "typescript": "^4.1.3",
-    "vscode-test": "^1.5.0",
-    "webpack": "^5.19.0",
-    "webpack-cli": "^4.4.0"
-  }
+	"name": "cmdlet",
+	"displayName": "cmdlet",
+	"description": "run command in the terminal",
+	"publisher": "cliffxuan",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cliffxuan/vscode-cmdlet.git"
+	},
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.56.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:cmdlet.runCmd"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "cmdlet.runCmd",
+				"title": "Cmdlet: run cmd"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run package",
+		"compile": "webpack",
+		"watch": "webpack --watch",
+		"package": "webpack --mode production --devtool hidden-source-map",
+		"test-compile": "tsc -p ./",
+		"test-watch": "tsc -watch -p ./",
+		"pretest": "npm run test-compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.0.4",
+		"@types/node": "^12.11.7",
+		"@types/vscode": "^1.56.0",
+		"@typescript-eslint/eslint-plugin": "^4.14.1",
+		"@typescript-eslint/parser": "^4.14.1",
+		"eslint": "^7.19.0",
+		"glob": "^7.1.6",
+		"mocha": "^8.2.1",
+		"ts-loader": "^8.0.14",
+		"typescript": "^4.1.3",
+		"vscode-test": "^1.5.0",
+		"webpack": "^5.19.0",
+		"webpack-cli": "^4.4.0"
+	},
+	"__metadata": {
+		"id": "df3eca62-da4f-4288-8ba5-8c0bdc001340",
+		"publisherDisplayName": "cliff xuan",
+		"publisherId": "95251b5a-4f19-4535-bbb6-d6c2a347df78",
+		"isPreReleaseVersion": false
+	}
 }
