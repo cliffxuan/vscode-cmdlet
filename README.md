@@ -50,3 +50,7 @@ Initial release of cmdlet
 ### 0.0.2
 
 Imporoved README
+
+### 0.0.3
+
+Icon
