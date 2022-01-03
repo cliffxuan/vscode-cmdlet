@@ -1,7 +1,7 @@
 {
-  "name": "vscode-cmdlet",
-  "displayName": "vscode-cmdlet",
-  "description": "vscode terminal enhancement",
+  "name": "cmdlet",
+  "displayName": "cmdlet",
+  "description": "run command in the terminal",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.56.0"
@@ -10,13 +10,13 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-cmdlet.runCmd"
+    "onCommand:cmdlet.runCmd"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-cmdlet.runCmd",
+        "command": "cmdlet.runCmd",
         "title": "Cmdlet: run cmd"
       }
     ]

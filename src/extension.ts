@@ -106,7 +106,7 @@ async function runCmd(
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vscode-cmdlet.runCmd",
+      "cmdlet.runCmd",
       (
         args:
           | { cmd: string | undefined; folder: string | undefined }
