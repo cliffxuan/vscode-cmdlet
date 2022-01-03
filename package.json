@@ -7,8 +7,8 @@
 		"type": "git",
 		"url": "https://github.com/cliffxuan/vscode-cmdlet.git"
 	},
-	"version": "0.0.3",
-	"icon": "images/icon.png",
+	"version": "0.0.4",
+	"icon": "images/icon-dark.png",
 	"engines": {
 		"vscode": "^1.63.2"
 	},

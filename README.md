@@ -54,3 +54,7 @@ Imporoved README
 ### 0.0.3
 
 Icon
+
+### 0.0.4
+
+Dark icon
