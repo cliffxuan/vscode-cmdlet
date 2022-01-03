@@ -86,14 +86,13 @@ async function runCmd(
     vscode.window.createTerminal({ name: termName });
   vscode.window.showInformationMessage(`run in ${termName}: ${cmd}`);
   for (let i = 0; i < 10; i++) {
-    if (term === vscode.window.activeTerminal) {
-      break;
-    }
     if (i === 0) {
       term.show();
-    }
-    if (i === 10) {
+    } else if (i === 10) {
       vscode.window.showErrorMessage(`failed to open terminal ${termName}`);
+    }
+    if (term === vscode.window.activeTerminal) {
+      break;
     }
     await new Promise(res => setTimeout(res, 100));
   }
